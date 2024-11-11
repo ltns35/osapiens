@@ -1,7 +1,6 @@
 import React, {useState} from "react";
-import {Theme, themes} from "@/themes/Theme";
-
-type ThemeName = keyof typeof themes;
+import {Theme, ThemeName, themes} from "@/themes/Theme";
+import {defaultTheme} from "@rneui/base";
 
 interface ThemeContextType {
     theme: Theme

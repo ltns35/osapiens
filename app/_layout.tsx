@@ -2,13 +2,16 @@ import {Stack} from 'expo-router';
 import React from 'react';
 import 'react-native-reanimated';
 import {ThemeProvider} from "@/themes/ThemeProvider";
+import {WeatherServiceProvider} from "@/services/WeatherServiceProvider";
 
-function Layout() {
+export default function Layout() {
     return (
-        <ThemeProvider>
-            <Stack>
-                <Stack.Screen name="(tabs)" options={{headerShown: true}}/>
-            </Stack>
-        </ThemeProvider>
+        <WeatherServiceProvider>
+            <ThemeProvider>
+                <Stack>
+                    <Stack.Screen name="(tabs)" options={{headerShown: true}}/>
+                </Stack>
+            </ThemeProvider>
+        </WeatherServiceProvider>
     );
 }

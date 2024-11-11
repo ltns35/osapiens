@@ -4,6 +4,8 @@ export interface Theme {
     backgroundColor: string;
 }
 
+export type ThemeName = keyof typeof themes;
+
 export const themes = {
     default: {
         backgroundColor: "#fefefe",
@@ -16,8 +18,8 @@ export const themes = {
         secondaryColor: "#33acac"
     },
     beta: {
-        backgroundColor: "#fff",
-        primaryColor: "#29bf2b",
+        backgroundColor: "#2b2b2b",
+        primaryColor: "#0c810e",
         secondaryColor: "#bc8717"
     },
 };
