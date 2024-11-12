@@ -34,19 +34,19 @@ export const mockGetWeatherDataResponse: AlphaGetWeatherDataResponse = {
 			rainProbability: 25
 		},
 		{
-			id: "1",
+			id: "2",
 			date: "2025-01-02",
 			weather: "cloudy",
 			rainProbability: 30
 		},
 		{
-			id: "1",
+			id: "3",
 			date: "2025-01-03",
 			weather: "sunny",
 			rainProbability: 5
 		},
 		{
-			id: "1",
+			id: "4",
 			date: "2025-01-04",
 			weather: "sunny",
 			rainProbability: 10
