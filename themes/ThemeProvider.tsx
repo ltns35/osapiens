@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Theme, ThemeName, themes} from "@/themes/Theme";
-import {defaultTheme} from "@rneui/base";
 
 interface ThemeContextType {
     theme: Theme

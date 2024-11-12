@@ -1,12 +1,14 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
 import React, {useContext, useEffect, useState} from "react";
 import {Picker} from "@react-native-picker/picker";
-import {alphaWeatherService} from "@/api/AlphaWeatherService";
-import {betaWeatherService} from "@/api/BetaWeatherService";
 import {WeatherServiceContext} from "@/services/WeatherServiceProvider";
-import {ThemeName} from "@/themes/Theme";
-import WeatherService from "@/api/WeatherService";
+import {Theme, ThemeName} from "@/themes/Theme";
 import {ThemeContext} from "@/themes/ThemeProvider";
+import {useThemedStyles} from "@/hooks/useThemedStyles";
+import NamedStyles = StyleSheet.NamedStyles;
+import WeatherService from "@/services/WeatherService";
+import {alphaWeatherService} from "@/services/AlphaWeatherService";
+import {betaWeatherService} from "@/services/BetaWeatherService";
 
 type AvailableService = {
     id: string;
@@ -21,6 +23,7 @@ type AvailableService = {
 export default function SettingsScreen() {
     const {updateTheme} = useContext(ThemeContext);
     const {updateService} = useContext(WeatherServiceContext)
+    const style = useThemedStyles(styles)
 
     // This could be retrieved from local or cloud storage.
     const defaultService = availableServices.find((s) => s.default);
@@ -58,15 +61,15 @@ export default function SettingsScreen() {
 
     if (error) {
         return (
-            <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>Error: No valid service found.</Text>
+            <View style={style.errorContainer}>
+                <Text style={style.errorText}>Error: No valid service found.</Text>
             </View>
         );
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Select Weather Service:</Text>
+        <View style={style.container}>
+            <Text style={style.title}>Select Weather Service:</Text>
             <Picker
                 selectedValue={selectedServiceId}
                 onValueChange={onPickerValueChange}
@@ -98,28 +101,40 @@ const availableServices: AvailableService[] = [
     }
 ]
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
-    errorContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    errorText: {
-        fontSize: 18,
-        color: '#721c24',
-    },
-});
+const styles = (theme: Theme): NamedStyles<SettingsStyle> => {
+    return {
+        container: {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: theme.backgroundColor,
+        },
+        title: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: theme.primaryColor,
+        },
+        separator: {
+            marginVertical: 30,
+            height: 1,
+            width: '80%',
+        },
+        errorContainer: {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        errorText: {
+            fontSize: 18,
+            color: theme.errorColor,
+        },
+    };
+}
+
+interface SettingsStyle {
+    container: ViewStyle;
+    title: TextStyle;
+    separator: ViewStyle;
+    errorContainer: ViewStyle;
+    errorText: TextStyle;
+}

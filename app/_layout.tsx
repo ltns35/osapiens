@@ -9,7 +9,7 @@ export default function Layout() {
         <WeatherServiceProvider>
             <ThemeProvider>
                 <Stack>
-                    <Stack.Screen name="(tabs)" options={{headerShown: true}}/>
+                    <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
                 </Stack>
             </ThemeProvider>
         </WeatherServiceProvider>

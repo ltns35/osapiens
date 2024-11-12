@@ -1,7 +1,5 @@
 import React, {useState} from "react";
-import {alphaWeatherService} from "@/api/AlphaWeatherService";
-import WeatherService, {defaultWeatherService} from "@/api/WeatherService";
-import {betaWeatherService} from "@/api/BetaWeatherService";
+import WeatherService, {defaultWeatherService} from "@/services/WeatherService";
 
 interface WeatherServiceContextType {
     service: WeatherService,

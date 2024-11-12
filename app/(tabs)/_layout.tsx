@@ -1,23 +1,24 @@
 import {Tabs} from 'expo-router';
-import {useClientOnlyValue} from "@/components/useClientOnlyValue";
 import {useThemedStyles} from "@/hooks/useThemedStyles";
-import {useTheme} from "@/hooks/useTheme";
 import {TabBarIcon} from "@/components/TabBarIcon";
 import {Theme} from "@/themes/Theme";
 
 export default function TabLayout() {
-    const theme = useTheme();
     const style = useThemedStyles(styles);
 
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: style.tabBarItem.selectedTintColor,
-                tabBarInactiveTintColor: style.tabBarItem.unselectedTintColor,
+                tabBarActiveTintColor: style.tabBar.item.selectedTintColor,
+                tabBarInactiveTintColor: style.tabBar.item.unselectedTintColor,
                 tabBarStyle: {
-                    backgroundColor: style.tabBarItem.backgroundColor,
+                    backgroundColor: style.tabBar.backgroundColor,
                 },
-                headerShown: useClientOnlyValue(false, true),
+                headerShown: true,
+                headerStyle: {
+                    backgroundColor: style.navigationBar.backgroundColor,
+                },
+                headerTintColor: style.navigationBar.color,
             }}>
             <Tabs.Screen
                 name="index"
@@ -39,11 +40,16 @@ export default function TabLayout() {
 
 const styles = (theme: Theme) => {
     return {
-        tabBarItem: {
+        tabBar: {
             backgroundColor: theme.backgroundColor,
-            unselectedTintColor: theme.secondaryColor,
-            selectedTintColor: theme.primaryColor,
+            item: {
+                unselectedTintColor: theme.secondaryColor,
+                selectedTintColor: theme.primaryColor,
+            }
+        },
+        navigationBar: {
+            backgroundColor: theme.primaryColor,
+            color: theme.secondaryColor,
         }
     };
-}
-
+};

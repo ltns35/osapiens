@@ -1,4 +1,5 @@
-import {AlphaWeatherService} from "@/api/AlphaWeatherService";
+import WeatherService from "@/services/WeatherService";
+import {AlphaWeatherService} from "@/services/AlphaWeatherService";
 
 type WeatherServiceType = 'alpha' | 'beta';
 
