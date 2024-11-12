@@ -1,8 +1,13 @@
 import {mockGetCitiesByNameResponse, mockGetWeatherDataResponse} from "@/api/BetaAPIClientMockData";
+import {sleep} from "@/utils/sleep";
 
 export class BetaAPIClient {
 	async getCitiesByName(params: BetaGetCitiesByNameParams): Promise<BetaGetCitiesByNameResponse[]> {
-		return mockGetCitiesByNameResponse
+		await sleep(2)
+
+		return mockGetCitiesByNameResponse.filter((item) => {
+			return item.name.toLowerCase().includes(params.name.toLowerCase())
+		})
 	}
 
 	async getWeatherData(params: BetaGetWeatherDataParams): Promise<BetaGetWeatherDataResponse[]> {

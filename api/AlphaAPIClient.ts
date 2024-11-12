@@ -4,7 +4,14 @@ import {sleep} from "@/utils/sleep";
 export class AlphaAPIClient {
 	async getCitiesByName(params: AlphaGetCitiesByNameParams): Promise<AlphaGetCitiesByNameResponse> {
 		await sleep(2)
-		return mockGetCitiesByNameResponse
+
+		const dataFiltered = mockGetCitiesByNameResponse.data.filter((item) => {
+			return item.name.toLowerCase().includes(params.name.toLowerCase())
+		})
+
+		return {
+			data: dataFiltered,
+		}
 	}
 
 	async getWeatherData(params: AlphaGetWeatherDataParams): Promise<AlphaGetWeatherDataResponse> {
