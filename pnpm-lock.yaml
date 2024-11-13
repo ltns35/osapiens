@@ -23,9 +23,6 @@ importers:
       '@rneui/themed':
         specifier: 4.0.0-rc.8
         version: 4.0.0-rc.8(@rneui/base@4.0.0-rc.8(react-native-safe-area-context@4.14.0(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-vector-icons@10.2.0)(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
-      '@types/jest':
-        specifier: ^29.5.14
-        version: 29.5.14
       '@types/lodash':
         specifier: ^4.17.13
         version: 4.17.13
@@ -87,15 +84,27 @@ importers:
       '@babel/core':
         specifier: ^7.26.0
         version: 7.26.0
+      '@testing-library/react-native':
+        specifier: ^12.8.1
+        version: 12.8.1(jest@29.7.0(@types/node@22.9.0))(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react-test-renderer@18.3.1(react@18.2.0))(react@18.2.0)
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
       '@types/react':
         specifier: ~18.2.79
         version: 18.2.79
+      '@types/react-test-renderer':
+        specifier: ^18.3.0
+        version: 18.3.0
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@22.9.0)
       jest-expo:
         specifier: ~51.0.4
         version: 51.0.4(@babel/core@7.26.0)(jest@29.7.0(@types/node@22.9.0))(react@18.2.0)
       react-test-renderer:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.2.0)
       typescript:
         specifier: ~5.3.3
         version: 5.3.3
@@ -1347,6 +1356,17 @@ packages:
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
 
+  '@testing-library/react-native@12.8.1':
+    resolution: {integrity: sha512-/7PIFCpeqAD3j7nzKQhZtm1T6RR/O/tB1We7JHtYP5RpTBj8rPitEpt6xGrD8R0ymOh+DxDKK7Zovfv5uDSRWg==}
+    peerDependencies:
+      jest: '>=28.0.0'
+      react: '>=16.8.0'
+      react-native: '>=0.59'
+      react-test-renderer: '>=16.8.0'
+    peerDependenciesMeta:
+      jest:
+        optional: true
+
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -1410,6 +1430,9 @@ packages:
 
   '@types/react-native@0.70.19':
     resolution: {integrity: sha512-c6WbyCgWTBgKKMESj/8b4w+zWcZSsCforson7UdXtXMecG3MxCinYi6ihhrHVPyUrVzORsvEzK8zg32z4pK6Sg==}
+
+  '@types/react-test-renderer@18.3.0':
+    resolution: {integrity: sha512-HW4MuEYxfDbOHQsVlY/XtOvNHftCVEPhJF2pQXXwcUiUF+Oyb0usgp48HSgpK5rt8m9KZb22yqOeZm+rrVG8gw==}
 
   '@types/react@18.2.79':
     resolution: {integrity: sha512-RwGAGXPl9kSXwdNTafkOEuFrTBD5SA2B3iEB96xi8+xu5ddUa/cpvyVCSNn+asgLCTHkb5ZxN8gbuibYJi4s1w==}
@@ -3410,6 +3433,10 @@ packages:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
     engines: {node: '>=6'}
 
+  min-indent@1.0.1:
+    resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
+    engines: {node: '>=4'}
+
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
@@ -3941,6 +3968,11 @@ packages:
     peerDependencies:
       react: ^18.2.0
 
+  react-test-renderer@18.3.1:
+    resolution: {integrity: sha512-KkAgygexHUkQqtvvx/otwxtuFu5cVjfzTCtjXLH9boS19/Nbtg84zS7wIQn39G8IlrhThBpQsMKkq5ZHZIYFXA==}
+    peerDependencies:
+      react: ^18.3.1
+
   react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
@@ -3958,6 +3990,10 @@ packages:
   recast@0.21.5:
     resolution: {integrity: sha512-hjMmLaUXAm1hIuTqOdeYObMslq/q+Xff6QE3Y2P+uoHAg2nmVlLBps2hzh1UJDdMtDTMXOFewK6ky51JQIeECg==}
     engines: {node: '>= 4'}
+
+  redent@3.0.0:
+    resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
+    engines: {node: '>=8'}
 
   regenerate-unicode-properties@10.2.0:
     resolution: {integrity: sha512-DqHn3DwbmmPVzeKj9woBadqmXxLvQoQIwu7nopMc72ztvxVmVk2SBhSnx67zuye5TP+lJsb/TBQsjLKhnDf3MA==}
@@ -4343,6 +4379,10 @@ packages:
   strip-final-newline@2.0.0:
     resolution: {integrity: sha512-BrpvfNAE3dcvq7ll3xVumzjKjZQ5tI1sEUIKr3Uoks0XUl45St3FlatVqef9prk4jRDzhW6WZg+3bk93y6pLjA==}
     engines: {node: '>=6'}
+
+  strip-indent@3.0.0:
+    resolution: {integrity: sha512-laJTa3Jb+VQpaC6DseHhF7dXVqHTfJPCRDaEbid/drOhgitgYku/letMUqOXFoWV0zIIUbjpdH2t+tYj4bQMRQ==}
+    engines: {node: '>=8'}
 
   strip-json-comments@2.0.1:
     resolution: {integrity: sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==}
@@ -6920,6 +6960,17 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 3.0.1
 
+  '@testing-library/react-native@12.8.1(jest@29.7.0(@types/node@22.9.0))(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react-test-renderer@18.3.1(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      jest-matcher-utils: 29.7.0
+      pretty-format: 29.7.0
+      react: 18.2.0
+      react-native: 0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0)
+      react-test-renderer: 18.3.1(react@18.2.0)
+      redent: 3.0.0
+    optionalDependencies:
+      jest: 29.7.0(@types/node@22.9.0)
+
   '@tootallnate/once@2.0.0': {}
 
   '@types/babel__core@7.20.5':
@@ -6999,6 +7050,10 @@ snapshots:
       '@types/react-native': 0.70.19
 
   '@types/react-native@0.70.19':
+    dependencies:
+      '@types/react': 18.2.79
+
+  '@types/react-test-renderer@18.3.0':
     dependencies:
       '@types/react': 18.2.79
 
@@ -9479,6 +9534,8 @@ snapshots:
 
   mimic-fn@2.1.0: {}
 
+  min-indent@1.0.1: {}
+
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.11
@@ -10031,6 +10088,13 @@ snapshots:
       react-shallow-renderer: 16.15.0(react@18.2.0)
       scheduler: 0.23.2
 
+  react-test-renderer@18.3.1(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-is: 18.3.1
+      react-shallow-renderer: 16.15.0(react@18.2.0)
+      scheduler: 0.23.2
+
   react@18.2.0:
     dependencies:
       loose-envify: 1.4.0
@@ -10059,6 +10123,11 @@ snapshots:
       esprima: 4.0.1
       source-map: 0.6.1
       tslib: 2.8.1
+
+  redent@3.0.0:
+    dependencies:
+      indent-string: 4.0.0
+      strip-indent: 3.0.0
 
   regenerate-unicode-properties@10.2.0:
     dependencies:
@@ -10466,6 +10535,10 @@ snapshots:
   strip-eof@1.0.0: {}
 
   strip-final-newline@2.0.0: {}
+
+  strip-indent@3.0.0:
+    dependencies:
+      min-indent: 1.0.1
 
   strip-json-comments@2.0.1: {}
 

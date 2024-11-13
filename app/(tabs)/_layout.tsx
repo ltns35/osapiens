@@ -18,20 +18,20 @@ export default function TabLayout() {
                 headerStyle: {
                     backgroundColor: style.navigationBar.backgroundColor,
                 },
-                headerTintColor: style.navigationBar.color,
+                headerTintColor: style.navigationBar.color
             }}>
             <Tabs.Screen
                 name="index"
                 options={{
                     title: 'Weather',
-                    tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="home" color={color}/>
                 }}
             />
             <Tabs.Screen
                 name="settings"
                 options={{
                     title: 'Settings',
-                    tabBarIcon: ({color}) => <TabBarIcon name="cog" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="cog" color={color}/>
                 }}
             />
         </Tabs>
