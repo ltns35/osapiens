@@ -1,22 +1,20 @@
 import {ActivityIndicator, FlatList, Text, View} from "react-native";
 import {ListItem} from "@rneui/themed";
 
-interface CityModel {
-	id: string;
-	name: string;
-}
-
-type CitySearchResultsProps = {
+export interface CitySearchResultsProps {
 	loading: boolean;
 	error: boolean;
-	cities: CityModel[];
+	cities: {
+		id: string;
+		name: string;
+	}[];
 	onCitySelected: (id: string) => void;
 }
 
 export default function CitySearchResults({loading, error, cities, onCitySelected}: CitySearchResultsProps) {
 	if (loading) {
 		return (
-			<View>
+			<View testID="city-loading">
 				<ActivityIndicator size="large" color="#0000ff"/>
 				<Text>Loading cities...</Text>
 			</View>
@@ -29,9 +27,11 @@ export default function CitySearchResults({loading, error, cities, onCitySelecte
 
 	return (
 		<FlatList
+			testID="city-result"
 			data={cities ?? []}
 			renderItem={({item}) => (
-				<ListItem onPress={() => onCitySelected(item.id)}>
+				<ListItem testID="city-item"
+					onPress={() => onCitySelected(item.id)}>
 					<ListItem.Content>
 						<ListItem.Title>{item.name}</ListItem.Title>
 					</ListItem.Content>

@@ -1,22 +1,20 @@
 import {ActivityIndicator, FlatList, Text, View} from "react-native";
 import {ListItem} from "@rneui/themed";
 
-interface Data {
-	id: string;
-	weather: string;
-	date: string;
-}
-
-type WeatherDataProps = {
+export interface WeatherDataProps {
 	loading: boolean;
 	error: boolean;
-	data: Data[];
+	data: {
+		id: string;
+		weather: string;
+		date: string;
+	}[];
 }
 
 export default function WeatherData({loading, error, data}: WeatherDataProps) {
 	if (loading) {
 		return (
-			<View>
+			<View testID="weather-loading">
 				<ActivityIndicator size="large" color="#0000ff"/>
 				<Text>Loading weather data...</Text>
 			</View>
@@ -28,10 +26,10 @@ export default function WeatherData({loading, error, data}: WeatherDataProps) {
 	}
 
 	return (
-		<FlatList
+		<FlatList testID="weather-results"
 			data={data ?? []}
 			renderItem={({item}) => (
-				<ListItem bottomDivider>
+				<ListItem bottomDivider testID="weather-item">
 					<ListItem.Content>
 						<ListItem.Title>{item.weather}</ListItem.Title>
 						<ListItem.Subtitle>{item.date}</ListItem.Subtitle>

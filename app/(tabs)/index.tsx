@@ -95,7 +95,7 @@ export default function WeatherScreen() {
 	return (
 		<View style={style.container}>
 			<SearchBar
-				testID="searchBar"
+				testID="searchbar"
 				placeholder="Search by city..."
 				onChangeText={updateSearch}
 				value={search}
