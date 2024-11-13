@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {Theme, ThemeName, themes} from "@/themes/Theme";
+import WeatherService from "@/services/WeatherService";
 
 interface ThemeContextType {
     theme: Theme
@@ -15,9 +16,9 @@ export const ThemeContext = React.createContext<ThemeContextType>({
 export const ThemeProvider = ({children}: { children: React.ReactNode }) => {
     const [themeName, setTheme] = useState<ThemeName>('default');
 
-    const updateTheme = (theme: ThemeName) => {
+    const updateTheme = useCallback((theme: ThemeName) => {
         setTheme(theme);
-    };
+    }, []);
 
     const theme = themes[themeName];
 
