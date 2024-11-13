@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {WeatherServiceContext} from '@/services/WeatherServiceProvider';
 import {Theme, ThemeName} from '@/themes/Theme';
 import {ThemeContext} from '@/themes/ThemeProvider';
@@ -30,10 +30,10 @@ export default function SettingsScreen() {
 	const [selectedServiceId, setSelectedServiceId] = useState<string | undefined>(defaultService?.id);
 	const [error, setError] = useState(false);
 
-	const updateServiceAndTheme = (service: AvailableService) => {
+	const updateServiceAndTheme = useCallback((service: AvailableService) => {
 		updateService(service.value.service);
 		updateTheme(service.value.theme);
-	}
+	}, [updateService, updateTheme]);
 
 	useEffect(() => {
 		if (defaultService) {
@@ -41,7 +41,7 @@ export default function SettingsScreen() {
 		} else {
 			setError(true);
 		}
-	}, [defaultService, updateTheme]);
+	}, [defaultService, updateServiceAndTheme]);
 
 	useEffect(() => {
 		const selectedService = availableServices.find((s) => s.id === selectedServiceId);
@@ -51,7 +51,7 @@ export default function SettingsScreen() {
 		} else {
 			setError(true);
 		}
-	}, [selectedServiceId, updateService, updateTheme]);
+	}, [selectedServiceId, updateServiceAndTheme]);
 
 	const pickerItems = useMemo(
 		() =>

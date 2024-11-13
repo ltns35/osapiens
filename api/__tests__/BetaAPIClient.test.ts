@@ -1,5 +1,5 @@
 import { BetaAPIClient, BetaGetCitiesByNameParams, BetaGetCitiesByNameResponse, BetaGetWeatherDataParams, BetaGetWeatherDataResponse } from "@/api/BetaAPIClient";
-import { mockGetCitiesByNameResponse, mockGetWeatherDataResponse } from "@/api/BetaAPIClientMockData";
+import { mockGetWeatherDataResponse } from "@/api/BetaAPIClientMockData";
 
 jest.mock("@/utils/sleep", () => ({
 	sleep: jest.fn(() => Promise.resolve())

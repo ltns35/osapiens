@@ -19,21 +19,21 @@ export default function WeatherScreen() {
 	const [loading, setLoading] = useState({cities: false, weather: false});
 	const [error, setError] = useState({cities: false, weather: false});
 
-	const debouncedUpdateSearch = useCallback(
-		debounce(async (searchTerm: string) => {
-			setLoading(prev => ({...prev, cities: true}));
-			setError(prev => ({...prev, cities: false}));
+	const debouncedUpdateSearch = useCallback((searchTerm: string) => {
+		const debounceFunc = debounce(async () => {
+			setLoading((prev) => ({ ...prev, cities: true }));
+			setError((prev) => ({ ...prev, cities: false }));
 			try {
-				const response = await weatherService.getCitiesByName({name: searchTerm});
+				const response = await weatherService.getCitiesByName({ name: searchTerm });
 				setCitiesResponse(response);
-			} catch (err) {
-				setError(prev => ({...prev, cities: true}));
+			} catch {
+				setError((prev) => ({ ...prev, cities: true }));
 			} finally {
-				setLoading(prev => ({...prev, cities: false}));
+				setLoading((prev) => ({ ...prev, cities: false }));
 			}
-		}, 500),
-		[weatherService]
-	);
+		}, 500);
+		debounceFunc();
+	}, [weatherService]);
 
 	const updateSearch = (searchTerm: string) => {
 		setSearch(searchTerm);
@@ -63,7 +63,7 @@ export default function WeatherScreen() {
 				if (!isCancelled) {
 					setWeatherResponse(response);
 				}
-			} catch (err) {
+			} catch {
 				if (!isCancelled) {
 					setError(prev => ({...prev, weather: true}));
 				}
@@ -79,7 +79,7 @@ export default function WeatherScreen() {
 		return () => {
 			isCancelled = true;
 		};
-	}, [citySelected]);
+	}, [citySelected, weatherService]);
 
 	const renderCitySearchResults = () => (
 		loading.cities ? (

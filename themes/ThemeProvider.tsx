@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from "react";
 import {Theme, ThemeName, themes} from "@/themes/Theme";
-import WeatherService from "@/services/WeatherService";
 
 interface ThemeContextType {
     theme: Theme

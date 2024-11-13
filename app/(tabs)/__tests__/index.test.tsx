@@ -1,5 +1,5 @@
 import {useThemedStyles} from '@/hooks/useThemedStyles';
-import {fireEvent, renderRouter, screen, waitFor} from 'expo-router/testing-library';
+import {fireEvent, renderRouter, waitFor} from 'expo-router/testing-library';
 import {useWeatherService} from "@/hooks/useWeatherService";
 import WeatherScreen from "@/app/(tabs)";
 import {sleep} from "@/utils/sleep";
