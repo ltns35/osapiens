@@ -13,6 +13,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "**/__tests__/**/*.ts", // Include tests folder
+    "**/__tests__/**/*.tsx"  // Include tests folder
   ]
 }

@@ -1,12 +1,12 @@
-import {FlatList, StyleSheet, Text, View, ActivityIndicator, ViewStyle, TextStyle} from 'react-native';
-import React, {useEffect, useState, useCallback} from "react";
+import {ActivityIndicator, FlatList, StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
+import React, {useCallback, useEffect, useState} from "react";
 import {ListItem, SearchBar} from '@rneui/themed';
 import {Theme} from "@/themes/Theme";
 import {useThemedStyles} from "@/hooks/useThemedStyles";
 import {useWeatherService} from "@/hooks/useWeatherService";
-import NamedStyles = StyleSheet.NamedStyles;
 import {WeatherGetCitiesByNameModel, WeatherGetWeatherDataModel} from "@/services/WeatherService";
 import {debounce} from "lodash";
+import NamedStyles = StyleSheet.NamedStyles;
 
 export default function WeatherScreen() {
 	const style = useThemedStyles(styles);
@@ -16,18 +16,20 @@ export default function WeatherScreen() {
 	const [citiesResponse, setCitiesResponse] = useState<WeatherGetCitiesByNameModel | undefined>();
 	const [weatherResponse, setWeatherResponse] = useState<WeatherGetWeatherDataModel | undefined>();
 	const [overlayVisible, setOverlayVisible] = useState(false);
-	const [loading, setLoading] = useState({ cities: false, weather: false });
+	const [loading, setLoading] = useState({cities: false, weather: false});
+	const [error, setError] = useState({cities: false, weather: false});
 
 	const debouncedUpdateSearch = useCallback(
 		debounce(async (searchTerm: string) => {
-			setLoading(prev => ({ ...prev, cities: true }));
+			setLoading(prev => ({...prev, cities: true}));
+			setError(prev => ({...prev, cities: false}));
 			try {
-				const response = await weatherService.getCitiesByName({ name: searchTerm });
+				const response = await weatherService.getCitiesByName({name: searchTerm});
 				setCitiesResponse(response);
-			} catch (error) {
-				console.error("Error getting weather cities", error);
+			} catch (err) {
+				setError(prev => ({...prev, cities: true}));
 			} finally {
-				setLoading(prev => ({ ...prev, cities: false }));
+				setLoading(prev => ({...prev, cities: false}));
 			}
 		}, 500),
 		[]
@@ -53,15 +55,22 @@ export default function WeatherScreen() {
 		const fetchWeatherData = async () => {
 			if (!citySelected) return;
 
-			setLoading(prev => ({ ...prev, weather: true }));
+			setLoading(prev => ({...prev, weather: true}));
+			setError(prev => ({...prev, weather: false}));
 			setWeatherResponse(undefined);
 			try {
-				const response = await weatherService.getWeatherData({ location: citySelected });
-				if (!isCancelled) setWeatherResponse(response);
-			} catch (error) {
-				if (!isCancelled) console.error("Error getting weather city", error);
+				const response = await weatherService.getWeatherData({location: citySelected});
+				if (!isCancelled) {
+					setWeatherResponse(response);
+				}
+			} catch (err) {
+				if (!isCancelled) {
+					setError(prev => ({...prev, weather: true}));
+				}
 			} finally {
-				if (!isCancelled) setLoading(prev => ({ ...prev, weather: false }));
+				if (!isCancelled) {
+					setLoading(prev => ({...prev, weather: false}));
+				}
 			}
 		};
 
@@ -74,14 +83,18 @@ export default function WeatherScreen() {
 
 	const renderCitySearchResults = () => (
 		loading.cities ? (
-			<View style={style.loaderContainer}>
-				<ActivityIndicator size="large" color="#0000ff" />
+			<View style={style.loaderContainer} testID="loadingCities">
+				<ActivityIndicator size="large" color="#0000ff"/>
 				<Text>Loading cities...</Text>
 			</View>
+		) : error.cities ? (
+			<Text
+				testID="errorCities"
+				style={style.errorText}>Error loading cities.</Text>
 		) : (
 			<FlatList
 				data={citiesResponse?.cities ?? []}
-				renderItem={({ item }) => (
+				renderItem={({item}) => (
 					<ListItem onPress={() => onSearchCityTapped(item.id)}>
 						<ListItem.Content>
 							<ListItem.Title>{item.name}</ListItem.Title>
@@ -96,15 +109,16 @@ export default function WeatherScreen() {
 	const renderWeatherData = () => (
 		loading.weather ? (
 			<View style={style.loaderContainer}>
-				<ActivityIndicator size="large" color="#0000ff" />
+				<ActivityIndicator size="large" color="#0000ff"/>
 				<Text>Loading weather data...</Text>
 			</View>
+		) : error.weather ? (
+			<Text style={style.errorText}>Error loading weather data.</Text>
 		) : (
 			<FlatList
 				data={weatherResponse?.data ?? []}
-				renderItem={({ item }) => (
-					<ListItem bottomDivider
-							  onPress={() => onSearchCityTapped(item.id)}>
+				renderItem={({item}) => (
+					<ListItem bottomDivider onPress={() => onSearchCityTapped(item.id)}>
 						<ListItem.Content>
 							<ListItem.Title>{item.weather}</ListItem.Title>
 							<ListItem.Subtitle>{item.date}</ListItem.Subtitle>
@@ -119,6 +133,7 @@ export default function WeatherScreen() {
 	return (
 		<View style={style.container}>
 			<SearchBar
+				testID="searchBar"
 				placeholder="Search by city..."
 				onChangeText={updateSearch}
 				value={search}
@@ -146,10 +161,16 @@ const styles = (theme: Theme): NamedStyles<WeatherStyle> => ({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
+	errorText: {
+		color: 'red',
+		textAlign: 'center',
+		margin: 10,
+	},
 });
 
 interface WeatherStyle {
 	container: ViewStyle;
 	title: TextStyle;
 	loaderContainer: ViewStyle;
+	errorText: TextStyle;
 }
