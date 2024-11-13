@@ -1,12 +1,15 @@
-import {ActivityIndicator, FlatList, StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
-import React, {useCallback, useEffect, useState} from "react";
-import {ListItem, SearchBar} from '@rneui/themed';
-import {Theme} from "@/themes/Theme";
-import {useThemedStyles} from "@/hooks/useThemedStyles";
-import {useWeatherService} from "@/hooks/useWeatherService";
-import {WeatherGetCitiesByNameModel, WeatherGetWeatherDataModel} from "@/services/WeatherService";
-import {debounce} from "lodash";
+import { ActivityIndicator, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import React, { useCallback, useEffect, useState, Suspense } from "react";
+import { SearchBar } from '@rneui/themed';
+import { Theme } from "@/themes/Theme";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useWeatherService } from "@/hooks/useWeatherService";
+import { WeatherGetCitiesByNameModel, WeatherGetWeatherDataModel } from "@/services/WeatherService";
+import { debounce } from "lodash";
 import NamedStyles = StyleSheet.NamedStyles;
+
+const CitySearchResults = React.lazy(() => import('@/components/CitySearchResults'));
+const WeatherData = React.lazy(() => import('@/components/WeatherData'));
 
 export default function WeatherScreen() {
 	const style = useThemedStyles(styles);
@@ -16,15 +19,12 @@ export default function WeatherScreen() {
 	const [citiesResponse, setCitiesResponse] = useState<WeatherGetCitiesByNameModel | undefined>();
 	const [weatherResponse, setWeatherResponse] = useState<WeatherGetWeatherDataModel | undefined>();
 	const [isSearching, setIsSearching] = useState(false);
-	const [loading, setLoading] = useState({cities: false, weather: false});
-	const [error, setError] = useState({cities: false, weather: false});
+	const [loading, setLoading] = useState({ cities: false, weather: false });
+	const [error, setError] = useState({ cities: false, weather: false });
 
 	const validateInput = (search: string) => {
-		/* Additional validations can be implemented here, or alternatively,
-		 a third-party validation library like Zod can be used.
-		 */
-		return search.trim().length > 0
-	}
+		return search.trim().length > 0;
+	};
 
 	const debouncedUpdateSearch = useCallback((search: string) => {
 		const debounceFunc = debounce(async () => {
@@ -32,15 +32,15 @@ export default function WeatherScreen() {
 				return;
 			}
 
-			setLoading((prev) => ({...prev, cities: true}));
-			setError((prev) => ({...prev, cities: false}));
+			setLoading((prev) => ({ ...prev, cities: true }));
+			setError((prev) => ({ ...prev, cities: false }));
 			try {
-				const response = await weatherService.getCitiesByName({name: search});
+				const response = await weatherService.getCitiesByName({ name: search });
 				setCitiesResponse(response);
 			} catch {
-				setError((prev) => ({...prev, cities: true}));
+				setError((prev) => ({ ...prev, cities: true }));
 			} finally {
-				setLoading((prev) => ({...prev, cities: false}));
+				setLoading((prev) => ({ ...prev, cities: false }));
 			}
 		}, 500);
 		debounceFunc();
@@ -66,21 +66,21 @@ export default function WeatherScreen() {
 		const fetchWeatherData = async () => {
 			if (!citySelected) return;
 
-			setLoading(prev => ({...prev, weather: true}));
-			setError(prev => ({...prev, weather: false}));
+			setLoading((prev) => ({ ...prev, weather: true }));
+			setError((prev) => ({ ...prev, weather: false }));
 			setWeatherResponse(undefined);
 			try {
-				const response = await weatherService.getWeatherData({location: citySelected});
+				const response = await weatherService.getWeatherData({ location: citySelected });
 				if (!isCancelled) {
 					setWeatherResponse(response);
 				}
 			} catch {
 				if (!isCancelled) {
-					setError(prev => ({...prev, weather: true}));
+					setError((prev) => ({ ...prev, weather: true }));
 				}
 			} finally {
 				if (!isCancelled) {
-					setLoading(prev => ({...prev, weather: false}));
+					setLoading((prev) => ({ ...prev, weather: false }));
 				}
 			}
 		};
@@ -92,55 +92,6 @@ export default function WeatherScreen() {
 		};
 	}, [citySelected, weatherService]);
 
-	const renderCitySearchResults = () => (
-		loading.cities ? (
-			<View style={style.loaderContainer} testID="loadingCities">
-				<ActivityIndicator size="large" color="#0000ff"/>
-				<Text>Loading cities...</Text>
-			</View>
-		) : error.cities ? (
-			<Text
-				testID="errorCities"
-				style={style.errorText}>Error loading cities.</Text>
-		) : (
-			<FlatList
-				data={citiesResponse?.cities ?? []}
-				renderItem={({item}) => (
-					<ListItem onPress={() => onSearchCityTapped(item.id)}>
-						<ListItem.Content>
-							<ListItem.Title>{item.name}</ListItem.Title>
-						</ListItem.Content>
-					</ListItem>
-				)}
-				keyExtractor={(item) => item.id.toString()}
-			/>
-		)
-	);
-
-	const renderWeatherData = () => (
-		loading.weather ? (
-			<View style={style.loaderContainer}>
-				<ActivityIndicator size="large" color="#0000ff"/>
-				<Text>Loading weather data...</Text>
-			</View>
-		) : error.weather ? (
-			<Text style={style.errorText}>Error loading weather data.</Text>
-		) : (
-			<FlatList
-				data={weatherResponse?.data ?? []}
-				renderItem={({item}) => (
-					<ListItem bottomDivider onPress={() => onSearchCityTapped(item.id)}>
-						<ListItem.Content>
-							<ListItem.Title>{item.weather}</ListItem.Title>
-							<ListItem.Subtitle>{item.date}</ListItem.Subtitle>
-						</ListItem.Content>
-					</ListItem>
-				)}
-				keyExtractor={(item) => item.id.toString()}
-			/>
-		)
-	);
-
 	return (
 		<View style={style.container}>
 			<SearchBar
@@ -149,7 +100,27 @@ export default function WeatherScreen() {
 				onChangeText={updateSearch}
 				value={search}
 			/>
-			{isSearching ? renderCitySearchResults() : renderWeatherData()}
+			<Suspense fallback={<ActivityIndicator size="large" color="#0000ff" />}>
+				{isSearching ? (
+					<CitySearchResults
+						loading={loading.cities}
+						error={error.cities}
+						cities={citiesResponse?.cities ?? []}
+						onCitySelected={onSearchCityTapped}/>
+				) : (
+					<WeatherData
+						loading={loading.weather}
+						error={error.weather}
+						data={(weatherResponse?.data ?? []).map((e) => {
+							return {
+								id: e.id,
+								weather: e.weather,
+								date: e.date
+							}
+						})}
+					/>
+				)}
+			</Suspense>
 		</View>
 	);
 }
