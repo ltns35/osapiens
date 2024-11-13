@@ -32,7 +32,7 @@ export default function WeatherScreen() {
 				setLoading(prev => ({...prev, cities: false}));
 			}
 		}, 500),
-		[]
+		[weatherService]
 	);
 
 	const updateSearch = (searchTerm: string) => {
