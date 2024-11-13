@@ -21,20 +21,24 @@ const mockWeatherService = {
 (useWeatherService as jest.Mock).mockReturnValue(mockWeatherService);
 (useThemedStyles as jest.Mock).mockReturnValue(mockThemeStyles);
 
+const renderWithScreen = () => {
+	return renderRouter(
+		{
+			index: () => <WeatherScreen />,
+		},
+		{
+			initialUrl: '/',
+		}
+	);
+}
+
 describe("WeatherScreen", () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
 	it("renders the WeatherScreen and search bar", () => {
-		const { getByTestId } = renderRouter(
-			{
-				index: () => <WeatherScreen />,
-			},
-			{
-				initialUrl: '/',
-			}
-		);
+		const { getByTestId } = renderWithScreen()
 
 		expect(getByTestId("searchBar")).toBeTruthy();
 	});
@@ -44,14 +48,7 @@ describe("WeatherScreen", () => {
 			() => sleep(5)
 		);
 
-		const { getByTestId } = renderRouter(
-			{
-				index: () => <WeatherScreen />,
-			},
-			{
-				initialUrl: '/',
-			}
-		);
+		const { getByTestId } = renderWithScreen()
 
 		fireEvent.changeText(getByTestId("searchBar"), "Mad");
 
@@ -63,14 +60,7 @@ describe("WeatherScreen", () => {
 	it("displays error message if fetching city data fails", async () => {
 		mockWeatherService.getCitiesByName.mockRejectedValue(new Error("Network error"));
 
-		const { getByTestId } = renderRouter(
-			{
-				index: () => <WeatherScreen />,
-			},
-			{
-				initialUrl: '/',
-			}
-		);
+		const { getByTestId } = renderWithScreen()
 
 		fireEvent.changeText(getByTestId("searchBar"), "Mad");
 
@@ -84,14 +74,7 @@ describe("WeatherScreen", () => {
 		];
 		mockWeatherService.getCitiesByName.mockResolvedValue({ cities: mockCities });
 
-		const { findByText, getByTestId } = renderRouter(
-			{
-				index: () => <WeatherScreen />,
-			},
-			{
-				initialUrl: '/',
-			}
-		);
+		const { findByText, getByTestId } = renderWithScreen()
 
 		fireEvent.changeText(getByTestId("searchBar"), "Mad");
 
@@ -106,14 +89,7 @@ describe("WeatherScreen", () => {
 			() => sleep(0.5)
 		);
 
-		const { getByText, getByTestId, findByText } = renderRouter(
-			{
-				index: () => <WeatherScreen />,
-			},
-			{
-				initialUrl: '/',
-			}
-		);
+		const { getByText, getByTestId, findByText } = renderWithScreen()
 
 		fireEvent.changeText(getByTestId("searchBar"), "Mad");
 		const cityItem = await findByText("Madrid");
@@ -129,14 +105,7 @@ describe("WeatherScreen", () => {
 		mockWeatherService.getCitiesByName.mockResolvedValue({ cities: mockCities });
 		mockWeatherService.getWeatherData.mockRejectedValue(new Error("Network error"));
 
-		const { getByText, getByTestId, findByText } = renderRouter(
-			{
-				index: () => <WeatherScreen />,
-			},
-			{
-				initialUrl: '/',
-			}
-		);
+		const { getByText, getByTestId, findByText } = renderWithScreen()
 
 		fireEvent.changeText(getByTestId("searchBar"), "Mad");
 		const cityItem = await findByText("Madrid");
@@ -156,14 +125,7 @@ describe("WeatherScreen", () => {
 		mockWeatherService.getCitiesByName.mockResolvedValue({ cities: mockCities });
 		mockWeatherService.getWeatherData.mockResolvedValue({ data: mockWeatherData });
 
-		const { getByTestId, findByText } = renderRouter(
-			{
-				index: () => <WeatherScreen />,
-			},
-			{
-				initialUrl: '/',
-			}
-		);
+		const { getByTestId, findByText } = renderWithScreen()
 
 		fireEvent.changeText(getByTestId("searchBar"), "Mad");
 		const cityItem = await findByText("Madrid");
