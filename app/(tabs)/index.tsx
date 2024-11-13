@@ -15,21 +15,32 @@ export default function WeatherScreen() {
 	const [citySelected, setCitySelected] = useState("");
 	const [citiesResponse, setCitiesResponse] = useState<WeatherGetCitiesByNameModel | undefined>();
 	const [weatherResponse, setWeatherResponse] = useState<WeatherGetWeatherDataModel | undefined>();
-	const [overlayVisible, setOverlayVisible] = useState(false);
+	const [isSearching, setIsSearching] = useState(false);
 	const [loading, setLoading] = useState({cities: false, weather: false});
 	const [error, setError] = useState({cities: false, weather: false});
 
-	const debouncedUpdateSearch = useCallback((searchTerm: string) => {
+	const validateInput = (search: string) => {
+		/* Additional validations can be implemented here, or alternatively,
+		 a third-party validation library like Zod can be used.
+		 */
+		return search.trim().length > 0
+	}
+
+	const debouncedUpdateSearch = useCallback((search: string) => {
 		const debounceFunc = debounce(async () => {
-			setLoading((prev) => ({ ...prev, cities: true }));
-			setError((prev) => ({ ...prev, cities: false }));
+			if (!validateInput(search)) {
+				return;
+			}
+
+			setLoading((prev) => ({...prev, cities: true}));
+			setError((prev) => ({...prev, cities: false}));
 			try {
-				const response = await weatherService.getCitiesByName({ name: searchTerm });
+				const response = await weatherService.getCitiesByName({name: search});
 				setCitiesResponse(response);
 			} catch {
-				setError((prev) => ({ ...prev, cities: true }));
+				setError((prev) => ({...prev, cities: true}));
 			} finally {
-				setLoading((prev) => ({ ...prev, cities: false }));
+				setLoading((prev) => ({...prev, cities: false}));
 			}
 		}, 500);
 		debounceFunc();
@@ -37,14 +48,14 @@ export default function WeatherScreen() {
 
 	const updateSearch = (searchTerm: string) => {
 		setSearch(searchTerm);
-		setOverlayVisible(true);
+		setIsSearching(true);
 		setCitiesResponse(undefined);
 		debouncedUpdateSearch(searchTerm);
 	};
 
 	const onSearchCityTapped = useCallback((id: string) => {
 		if (citySelected !== id) {
-			setOverlayVisible(false);
+			setIsSearching(false);
 			setCitySelected(id);
 		}
 	}, [citySelected]);
@@ -138,7 +149,7 @@ export default function WeatherScreen() {
 				onChangeText={updateSearch}
 				value={search}
 			/>
-			{overlayVisible ? renderCitySearchResults() : renderWeatherData()}
+			{isSearching ? renderCitySearchResults() : renderWeatherData()}
 		</View>
 	);
 }

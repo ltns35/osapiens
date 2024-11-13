@@ -57,6 +57,22 @@ describe("WeatherScreen", () => {
 		expect(getByTestId("loadingCities")).toBeTruthy();
 	});
 
+	it("don't search when fetching city data and search value is empty or whitespace", async () => {
+		mockWeatherService.getCitiesByName.mockImplementation(
+			() => sleep(5)
+		);
+
+		const { getByTestId, queryByTestId } = renderWithScreen()
+
+		fireEvent.changeText(getByTestId("searchBar"), "");
+
+		await waitFor(() => {
+			expect(queryByTestId("loadingCities")).toBeNull();
+		});
+
+		expect(mockWeatherService.getCitiesByName).not.toHaveBeenCalled();
+	});
+
 	it("displays error message if fetching city data fails", async () => {
 		mockWeatherService.getCitiesByName.mockRejectedValue(new Error("Network error"));
 
