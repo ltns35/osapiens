@@ -33,7 +33,7 @@ export class BetaWeatherService implements WeatherService {
 			return mapWeatherResponse(response);
 		} catch (err) {
 			if (err instanceof Error) {
-				throw new Error(`Failed fetching weather data for ${location}`);
+				throw new Error(`Failed fetching weather data for ${params.location}`);
 			}
 			throw new Error(`Failed fetching weather data with an unknown error: ${err}`);
 		}
@@ -57,7 +57,7 @@ function mapCitiesResponse(response: BetaGetCitiesByNameResponse[]): WeatherGetC
 
 function mapWeatherResponse(response: BetaGetWeatherDataResponse[]): WeatherGetWeatherDataModel {
 	const weatherData = response.map((weather, index) => ({
-		id: index.toString(),
+		id: (index + 1).toString(),
 		date: weather.date,
 		weather: weather.value,
 		rainProbability: 0,
